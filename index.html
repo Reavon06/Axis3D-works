@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AXIS 3D WORKS — Premium Manufacturing Portfolio showcasing laser cutting, sculptures, interiors, and prototypes." />
+  <title>AXIS 3D WORKS — Premium Manufacturing Portfolio</title>
+  <meta property="og:title" content="AXIS 3D WORKS" />
+  <meta property="og:description" content="Premium Manufacturing Portfolio — laser cutting, sculptures, interiors, and prototypes." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-scene" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+    <canvas id="particles-canvas"></canvas>
+  </div>
+
+  <!-- Navigation -->
+  <header class="site-header" id="site-header">
+    <nav class="nav-glass" role="navigation" aria-label="Main navigation">
+      <div class="nav-inner">
+        <div class="nav-brand">
+          <img class="brand-logo" src="logo.png" alt="AXIS 3D WORKS" />
+        </div>
+
+        <div class="nav-filters" id="nav-filters" role="group" aria-label="Category filters">
+          <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
+          <button class="filter-btn" data-category="awards" aria-pressed="false">Awards</button>
+          <button class="filter-btn" data-category="products" aria-pressed="false">Products</button>
+          <button class="filter-btn" data-category="laser" aria-pressed="false">Laser</button>
+          <button class="filter-btn" data-category="sculptures" aria-pressed="false">Sculptures</button>
+          <button class="filter-btn" data-category="interiors" aria-pressed="false">Interiors</button>
+          <button class="filter-btn" data-category="prototypes" aria-pressed="false">Prototypes</button>
+        </div>
+
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle filters" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <!-- Mobile filter drawer -->
+      <div class="mobile-filters" id="mobile-filters" aria-hidden="true">
+        <button class="filter-btn active" data-category="all" aria-pressed="true">All</button>
+        <button class="filter-btn" data-category="awards" aria-pressed="false">Awards</button>
+        <button class="filter-btn" data-category="products" aria-pressed="false">Products</button>
+        <button class="filter-btn" data-category="laser" aria-pressed="false">Laser</button>
+        <button class="filter-btn" data-category="sculptures" aria-pressed="false">Sculptures</button>
+        <button class="filter-btn" data-category="interiors" aria-pressed="false">Interiors</button>
+        <button class="filter-btn" data-category="prototypes" aria-pressed="false">Prototypes</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Gallery Section -->
+  <main class="gallery-section" id="gallery-section">
+
+    <!-- Loading state -->
+    <div class="gallery-loader" id="gallery-loader" aria-live="polite">
+      <div class="loader-ring"></div>
+      <span>Loading portfolio&hellip;</span>
+    </div>
+
+    <!-- Empty state -->
+    <div class="gallery-empty" id="gallery-empty" style="display:none">
+      <div class="glass-card empty-card">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="8" y="8" width="32" height="32" rx="4" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <path d="M16 28l6-6 4 4 6-8" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p>No works found in this category.</p>
+      </div>
+    </div>
+
+    <!-- Masonry grid -->
+    <div class="masonry-grid" id="masonry-grid" role="list" aria-label="Portfolio gallery"></div>
+
+    <!-- Infinite scroll sentinel -->
+    <div class="scroll-sentinel" id="scroll-sentinel" aria-hidden="true"></div>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close viewer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+
+    <div class="lightbox-stage">
+      <div class="lightbox-img-wrap" id="lightbox-img-wrap">
+        <img class="lightbox-img" id="lightbox-img" src="" alt="" draggable="false" />
+        <div class="lightbox-spinner" id="lightbox-spinner">
+          <div class="loader-ring small"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next image">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"/>
+      </svg>
+    </button>
+
+    <div class="lightbox-footer glass-card">
+      <div class="lightbox-meta">
+        <span class="lightbox-category" id="lightbox-category"></span>
+        <span class="lightbox-title" id="lightbox-title"></span>
+      </div>
+      <span class="lightbox-counter" id="lightbox-counter"></span>
+    </div>
+
+    <!-- Thumbnail strip -->
+    <div class="lightbox-thumbs" id="lightbox-thumbs" role="list" aria-label="Image thumbnails"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
